@@ -1,3 +1,45 @@
 <resources>
-    <string name="app_name">SharedLists</string>
+    <string name="app_name">Shared Lists</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_capital_letter">You need to have a capital letter at least</string>
+    <string name="error_lower_case">You need to have a lowercase at least</string>
+    <string name="error_number">you need a number at least</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="new_member">You are not a member? creat your account...</string>
+    <string name="button_new_user">Create new user</string>
+    <string name="account_alredy_exist">I am already a user, I have an account</string>
+    <string name="title_activity_principal">Hello again!</string>
+
+    <!--Menu Settings strings-->
+    <string name="settings">Settings</string>
+    <string name="policy">Privacy Policy</string>
+
+    <!--Settings strings-->
+    <string name="account">Account</string>
+    <string name="quetion_email"><u>You want to change the email?</u></string>
+    <string name="question_pass"><u>You want to change the password?</u></string>
+    <string name="question_delete"><u>You want to delete the account?</u></string>
+    <string name="confirm_pass">Confirm password</string>
+    <string name="input_email">Enter the new email</string>
+    <string name="input_password">Enter the new password</string>
+    <string name="validate_ema_pass">Confim changes</string>
+    <string name="confirm_delete_account">Confirm delete account</string>
+    <string name="equals_pass">The passwords do not match, try again</string>
+    <string name="change_made">Changes made</string>
+    <string name="error_change_email">Ups error in the changes</string>
+    <string name="change_pass">Password changed</string>
+    <string name="error_change_pass">Ups error in the changes</string>
+
 </resources>

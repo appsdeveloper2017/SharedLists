@@ -3,9 +3,72 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowContentTransitions">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AbsoluteLinear">
+        <item name="android:layout_margin">@dimen/large_margin</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Title_Settings">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/texview_title_settings</item>
+        <item name="android:fontFamily">@font/great_vibes</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="Separators">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/separator</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@android:color/black</item>
+        <item name="android:layout_marginLeft">@dimen/padding_separator</item>
+        <item name="android:layout_marginRight">@dimen/padding_separator</item>
+
+    </style>
+
+    <style name="EditSettings">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="TextQuestions">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">@dimen/textview_settings</item>
+        <item name="android:layout_marginTop">@dimen/xlarge_margin</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/great_vibes</item>
+    </style>
+
+    <style name="TextSettings">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:textSize">@dimen/confirmations_size</item>
+        <item name="android:layout_marginRight">@dimen/large_margin</item>
+        <item name="android:paddingRight">@dimen/medium_padding</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/great_vibes</item>
     </style>
 
 </resources>

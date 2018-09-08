@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Colors default application-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--Colors gradient login-->
+    <color name="start">#7f7fd5</color>
+    <color name="center">#86a8e7</color>
+    <color name="end">#91eae4</color>
+    <!--Color Settings Activity-->
+    <color name="orage">#FFA000</color>
 </resources>

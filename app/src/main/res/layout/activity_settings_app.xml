@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_login">
+    <!--tools:context=".Settings.SettingsApp">-->
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/settings_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linear_settings"
+        style="@style/AbsoluteLinear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/titleAccount"
+            style="@style/Title_Settings"
+            android:text="@string/account" />
+
+        <TextView
+            android:id="@+id/question_email"
+            style="@style/TextQuestions"
+            android:text="@string/quetion_email" />
+
+        <EditText
+            android:id="@+id/mail"
+            style="@style/EditSettings"
+            android:hint="@string/input_email" />
+
+        <TextView
+            android:id="@+id/change_email"
+            style="@style/TextSettings"
+            android:text="@string/validate_ema_pass" />
+
+        <TextView
+            android:id="@+id/question_pass"
+            style="@style/TextQuestions"
+            android:text="@string/question_pass" />
+
+        <EditText
+            android:id="@+id/password"
+            style="@style/EditSettings"
+            android:hint="@string/input_password"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/change_pass"
+            style="@style/TextSettings"
+            android:text="@string/validate_ema_pass" />
+
+        <TextView
+            android:id="@+id/question_delete"
+            style="@style/TextQuestions"
+            android:text="@string/question_delete" />
+
+        <EditText
+            android:id="@+id/password_for_delete"
+            style="@style/EditSettings"
+            android:hint="@string/confirm_pass" />
+
+        <TextView
+            android:id="@+id/delete_account"
+            style="@style/TextSettings"
+            android:text="@string/confirm_delete_account" />
+
+        <View
+            style="@style/Separators"
+            android:layout_marginTop="@dimen/xlarge_margin" />
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "292934231072",
+    "firebase_url": "https://sharedlists-9a1b5.firebaseio.com",
+    "project_id": "sharedlists-9a1b5",
+    "storage_bucket": "sharedlists-9a1b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292934231072:android:20eac829cf9b36cc",
+        "android_client_info": {
+          "package_name": "com.appdesigndm.sharedlists"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292934231072-ehrm0gts3ubhubr4hocnmei7911g5re1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appdesigndm.sharedlists",
+            "certificate_hash": "dd50567eec675c04ec4eaad6bf9b78b1d99e5649"
+          }
+        },
+        {
+          "client_id": "292934231072-binkf7smdtm5f15h5ccm9244vgfuu0mj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdaTXhqQq0mzAp0aU2r5ktZpStWJieb1E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292934231072-binkf7smdtm5f15h5ccm9244vgfuu0mj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
