@@ -219,7 +219,7 @@ public class SettingsApp extends AppCompatActivity {
     }
 
     private boolean isValidPass(String password) {
-        return password.length() > 6 && hasUppercase.matcher(password).find() && hasLowercase.matcher(password).find() &&
+        return password.length() >= 6 && hasUppercase.matcher(password).find() && hasLowercase.matcher(password).find() &&
                 hasNumber.matcher(password).find();
 
     }
