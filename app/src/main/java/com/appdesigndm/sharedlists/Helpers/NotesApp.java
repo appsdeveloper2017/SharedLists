@@ -10,5 +10,7 @@ public class NotesApp extends Application {
     public static String password_user;
     public static boolean userLogged = false;
     public static FirebaseUser currentUserApp;
+
+
 }
 
