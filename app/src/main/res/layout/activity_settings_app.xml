@@ -37,6 +37,17 @@
             android:text="@string/account" />
 
         <TextView
+            android:id="@+id/question_changes"
+            style="@style/TextQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/what_changes" />
+
+        <Spinner
+            android:id="@+id/spinner_settings"
+            style="@style/SpinnerSettings"></Spinner>
+
+        <TextView
             android:id="@+id/question_email"
             style="@style/TextQuestions"
             android:text="@string/quetion_email" />

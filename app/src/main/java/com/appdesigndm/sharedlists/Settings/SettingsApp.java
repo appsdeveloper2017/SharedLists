@@ -9,13 +9,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appdesigndm.sharedlists.Helpers.NotesApp;
+import com.appdesigndm.sharedlists.Login.LoginActivity;
 import com.appdesigndm.sharedlists.Login.SplashActivity;
 import com.appdesigndm.sharedlists.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +34,7 @@ public class SettingsApp extends AppCompatActivity {
     //View components.
     private ProgressBar progressBar;
     private EditText newEmail, newPass, actualPassword;
-    private TextView confirmEmail, confirmPass, confirmDelete;
+    private TextView titleMail, confirmEmail, titlePass, confirmPass, titleDelete, confirmDelete;
     private LinearLayout linearLayout;
     private View view;
     private String email;
@@ -38,6 +42,10 @@ public class SettingsApp extends AppCompatActivity {
 
     //Declaration firebase.
     private FirebaseAuth mAuth;
+
+    //Array spinner options settings account user.
+    private String[] myArrayAccount = new String[4];
+    private Spinner spinnerSettings;
 
     //Requeriments of email and pass.
     private final Pattern hasUppercase = Pattern.compile("[A-Z]");
@@ -54,6 +62,18 @@ public class SettingsApp extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         init();
+        spinnerSettings.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, myArrayAccount));
+        spinnerSettings.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                noVisibleElements(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Listeners.
         confirmEmail.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +97,17 @@ public class SettingsApp extends AppCompatActivity {
     }
 
     private void init() {
+        //Spinner.
+        spinnerSettings = (Spinner) findViewById(R.id.spinner_settings);
+        //Array Spinner.
+        myArrayAccount[0] = getResources().getString(R.string.select_item);
+        myArrayAccount[1] = getResources().getString(R.string.quetion_email);
+        myArrayAccount[2] = getResources().getString(R.string.question_pass);
+        myArrayAccount[3] = getResources().getString(R.string.question_delete);
+        //Questions for action.
+        titleMail = (TextView) findViewById(R.id.question_email);
+        titlePass = (TextView) findViewById(R.id.question_pass);
+        titleDelete = (TextView) findViewById(R.id.question_delete);
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
         newPass = (EditText) findViewById(R.id.password);
@@ -89,11 +120,69 @@ public class SettingsApp extends AppCompatActivity {
         linearLayout = (LinearLayout) findViewById(R.id.linear_settings);
         //Progressbar
         progressBar = (ProgressBar) findViewById(R.id.settings_progress);
+        noVisibleElements(0);
+    }
+
+    private void noVisibleElements(int position) {
+        switch (position) {
+            case 0:
+                titleMail.setVisibility(View.GONE);
+                newEmail.setVisibility(View.GONE);
+                confirmEmail.setVisibility(View.GONE);
+
+                titlePass.setVisibility(View.GONE);
+                newPass.setVisibility(View.GONE);
+                confirmPass.setVisibility(View.GONE);
+
+                titleDelete.setVisibility(View.GONE);
+                actualPassword.setVisibility(View.GONE);
+                confirmDelete.setVisibility(View.GONE);
+                break;
+            case 1:
+                titleMail.setVisibility(View.VISIBLE);
+                newEmail.setVisibility(View.VISIBLE);
+                confirmEmail.setVisibility(View.VISIBLE);
+
+                titlePass.setVisibility(View.GONE);
+                newPass.setVisibility(View.GONE);
+                confirmPass.setVisibility(View.GONE);
+
+                titleDelete.setVisibility(View.GONE);
+                actualPassword.setVisibility(View.GONE);
+                confirmDelete.setVisibility(View.GONE);
+                break;
+            case 2:
+                titleMail.setVisibility(View.GONE);
+                newEmail.setVisibility(View.GONE);
+                confirmEmail.setVisibility(View.GONE);
+
+                titlePass.setVisibility(View.VISIBLE);
+                newPass.setVisibility(View.VISIBLE);
+                confirmPass.setVisibility(View.VISIBLE);
+
+                titleDelete.setVisibility(View.GONE);
+                actualPassword.setVisibility(View.GONE);
+                confirmDelete.setVisibility(View.GONE);
+                break;
+            case 3:
+                titleMail.setVisibility(View.GONE);
+                newEmail.setVisibility(View.GONE);
+                confirmEmail.setVisibility(View.GONE);
+
+                titlePass.setVisibility(View.GONE);
+                newPass.setVisibility(View.GONE);
+                confirmPass.setVisibility(View.GONE);
+
+                titleDelete.setVisibility(View.VISIBLE);
+                actualPassword.setVisibility(View.VISIBLE);
+                confirmDelete.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     //Change email in firebase.
     private void changeEmail(String email) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             closeInputManager(newEmail);
             progressBar.setVisibility(View.VISIBLE);
@@ -104,8 +193,9 @@ public class SettingsApp extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);
-                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.change_made), Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.validate_ac), Toast.LENGTH_SHORT);
                         toast.show();
+                        noVisibleElements(0);
                     } else {
                         progressBar.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);
@@ -133,6 +223,7 @@ public class SettingsApp extends AppCompatActivity {
                         linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.change_pass), Toast.LENGTH_SHORT);
                         toast.show();
+                        noVisibleElements(0);
                     } else {
                         progressBar.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);

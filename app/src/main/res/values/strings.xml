@@ -47,6 +47,9 @@
     <string name="error_change_email">Ups error in the changes</string>
     <string name="change_pass">Password changed</string>
     <string name="error_change_pass">Ups error in the changes</string>
+    <string name="what_changes">What changes you want to make in your account?</string>
+    <string name="select_item">Select item...</string>
+    <string name="validate_ac">It is necessary to validate the account through email!</string>
     
     <!--Main strings-->
     <string name="recovering_notes">Recovering notes, please wait...</string>

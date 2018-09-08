@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        mEmailView.setText("a@a.com");
+        mEmailView.setText("");
         mPasswordView.setText("Paco0000");
     }
 
