@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     //Varible for option button crete user or loggin user.
     private boolean booleanCreateUser = false;
     private TextView textCreateUser;
+    private TextView remember;
     //Class pattern for password keys.
     private final Pattern hasUppercase = Pattern.compile("[A-Z]");
     private final Pattern hasLowercase = Pattern.compile("[a-z]");
@@ -132,6 +133,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                     mEmailSignInButton.setText(getResources().getString(R.string.action_sign_in));
                 }
 
+            }
+        });
+        remember = (TextView)findViewById(R.id.remenber);
+        remember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rememberMe();
             }
         });
 
@@ -488,9 +496,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            openMain(email, password);
-
-                            finish();
+                            user.sendEmailVerification();
+                            Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.in_box),Toast.LENGTH_LONG);
+                            toast.show();
+                            showProgress(false);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -523,8 +532,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            openMain(email, password);
-                            finish();
+
+                            if (emailVerifier(user)){
+                                openMain(email,password);
+                            }else {
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.validate_email),
+                                        Toast.LENGTH_SHORT).show();
+                                showProgress(false);
+                            }
+//                            openMain(email, password);
+//                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -538,7 +555,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                     }
                 });
     }
+    public void rememberMe(){
 
+        String rememberMail = mEmailView.getText().toString();
+
+        if (TextUtils.isEmpty(rememberMail)) {
+            mEmailView.setError(getString(R.string.error_mail_required));
+        } else if (!isEmailValid(rememberMail)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+        }
+        if (isEmailValid(rememberMail)) {
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+
+            auth.sendPasswordResetEmail(rememberMail)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Email sent.");
+                                Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.remember_email_send),Toast.LENGTH_LONG);
+                                toast.show();
+                            }else {
+                                Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.error_remember_mail_send),Toast.LENGTH_LONG);
+                                toast.show();
+                            }
+                        }
+                    });
+        }
+
+    }
+    private boolean emailVerifier(FirebaseUser user) {
+        return user.isEmailVerified();
+    }
     private void updateUI(FirebaseUser currentUser) {
         NotesApp.currentUserApp = currentUser;
         NotesApp.userLogged = true;
