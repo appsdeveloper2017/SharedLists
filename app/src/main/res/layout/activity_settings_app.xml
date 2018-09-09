@@ -47,11 +47,6 @@
             android:id="@+id/spinner_settings"
             style="@style/SpinnerSettings"></Spinner>
 
-        <TextView
-            android:id="@+id/question_email"
-            style="@style/TextQuestions"
-            android:text="@string/quetion_email" />
-
         <EditText
             android:id="@+id/mail"
             style="@style/EditSettings"
@@ -62,10 +57,11 @@
             style="@style/TextSettings"
             android:text="@string/validate_ema_pass" />
 
-        <TextView
-            android:id="@+id/question_pass"
-            style="@style/TextQuestions"
-            android:text="@string/question_pass" />
+        <EditText
+            android:id="@+id/password_old"
+            style="@style/EditSettings"
+            android:hint="@string/old_password"
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/password"
@@ -77,11 +73,6 @@
             android:id="@+id/change_pass"
             style="@style/TextSettings"
             android:text="@string/validate_ema_pass" />
-
-        <TextView
-            android:id="@+id/question_delete"
-            style="@style/TextQuestions"
-            android:text="@string/question_delete" />
 
         <EditText
             android:id="@+id/password_for_delete"

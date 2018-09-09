@@ -1,9 +1,11 @@
 package com.appdesigndm.sharedlists.Settings;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,10 +35,9 @@ public class SettingsApp extends AppCompatActivity {
 
     //View components.
     private ProgressBar progressBar;
-    private EditText newEmail, newPass, actualPassword;
-    private TextView titleMail, confirmEmail, titlePass, confirmPass, titleDelete, confirmDelete;
+    private EditText newEmail, newPass, actualPassword,old_password;
+    private TextView confirmEmail, confirmPass, confirmDelete;
     private LinearLayout linearLayout;
-    private View view;
     private String email;
     private String password;
 
@@ -62,6 +63,8 @@ public class SettingsApp extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         init();
+
+        //Item selected for spinner.
         spinnerSettings.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, myArrayAccount));
         spinnerSettings.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -91,7 +94,7 @@ public class SettingsApp extends AppCompatActivity {
         confirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteAccount(view);
+                alertDeleteAccount();
             }
         });
     }
@@ -104,13 +107,11 @@ public class SettingsApp extends AppCompatActivity {
         myArrayAccount[1] = getResources().getString(R.string.quetion_email);
         myArrayAccount[2] = getResources().getString(R.string.question_pass);
         myArrayAccount[3] = getResources().getString(R.string.question_delete);
-        //Questions for action.
-        titleMail = (TextView) findViewById(R.id.question_email);
-        titlePass = (TextView) findViewById(R.id.question_pass);
-        titleDelete = (TextView) findViewById(R.id.question_delete);
+
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
         newPass = (EditText) findViewById(R.id.password);
+        old_password = (EditText)findViewById(R.id.password_old);
         actualPassword = (EditText) findViewById(R.id.password_for_delete);
         //Textview for onClickListeners.
         confirmEmail = (TextView) findViewById(R.id.change_email);
@@ -123,57 +124,50 @@ public class SettingsApp extends AppCompatActivity {
         noVisibleElements(0);
     }
 
+    //Atributes for visibility elements.
     private void noVisibleElements(int position) {
         switch (position) {
             case 0:
-                titleMail.setVisibility(View.GONE);
                 newEmail.setVisibility(View.GONE);
                 confirmEmail.setVisibility(View.GONE);
 
-                titlePass.setVisibility(View.GONE);
+                old_password.setVisibility(View.GONE);
                 newPass.setVisibility(View.GONE);
                 confirmPass.setVisibility(View.GONE);
 
-                titleDelete.setVisibility(View.GONE);
                 actualPassword.setVisibility(View.GONE);
                 confirmDelete.setVisibility(View.GONE);
                 break;
             case 1:
-                titleMail.setVisibility(View.VISIBLE);
                 newEmail.setVisibility(View.VISIBLE);
                 confirmEmail.setVisibility(View.VISIBLE);
 
-                titlePass.setVisibility(View.GONE);
+                old_password.setVisibility(View.GONE);
                 newPass.setVisibility(View.GONE);
                 confirmPass.setVisibility(View.GONE);
 
-                titleDelete.setVisibility(View.GONE);
                 actualPassword.setVisibility(View.GONE);
                 confirmDelete.setVisibility(View.GONE);
                 break;
             case 2:
-                titleMail.setVisibility(View.GONE);
                 newEmail.setVisibility(View.GONE);
                 confirmEmail.setVisibility(View.GONE);
 
-                titlePass.setVisibility(View.VISIBLE);
+                old_password.setVisibility(View.VISIBLE);
                 newPass.setVisibility(View.VISIBLE);
                 confirmPass.setVisibility(View.VISIBLE);
 
-                titleDelete.setVisibility(View.GONE);
                 actualPassword.setVisibility(View.GONE);
                 confirmDelete.setVisibility(View.GONE);
                 break;
             case 3:
-                titleMail.setVisibility(View.GONE);
                 newEmail.setVisibility(View.GONE);
                 confirmEmail.setVisibility(View.GONE);
 
-                titlePass.setVisibility(View.GONE);
+                old_password.setVisibility(View.GONE);
                 newPass.setVisibility(View.GONE);
                 confirmPass.setVisibility(View.GONE);
 
-                titleDelete.setVisibility(View.VISIBLE);
                 actualPassword.setVisibility(View.VISIBLE);
                 confirmDelete.setVisibility(View.VISIBLE);
                 break;
@@ -193,9 +187,8 @@ public class SettingsApp extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);
-                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.validate_ac), Toast.LENGTH_SHORT);
-                        toast.show();
                         noVisibleElements(0);
+                        alertVerifyEmail();
                     } else {
                         progressBar.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);
@@ -206,6 +199,46 @@ public class SettingsApp extends AppCompatActivity {
             });
         }
     }
+
+    //Alert Dialog info.
+    private void alertVerifyEmail() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(getResources().getString(R.string.title))
+                .setMessage(getResources().getString(R.string.validate_other_account))
+                .setPositiveButton(getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                logout();
+                                finish();
+                            }
+                        });
+        builder.show();
+    }
+    //Alert Dialog delete account..
+    private void alertDeleteAccount() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alert = builder.show();
+
+        builder.setTitle(getResources().getString(R.string.title_delete))
+                .setMessage(getResources().getString(R.string.message_delete))
+                .setPositiveButton(getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteAccount();
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        actualPassword.setText("");
+                        alert.dismiss();
+                    }
+                });
+        builder.show();
+    }
+
 
     //Change pass in firebase.
     private void changePassword(final String password) {
@@ -236,13 +269,14 @@ public class SettingsApp extends AppCompatActivity {
     }
 
     //Delete account in firebase.
-    public void deleteAccount(View view) {
+    public void deleteAccount() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && actualPassword.getText().toString().equals(NotesApp.password_user)) {
             linearLayout.setVisibility(View.GONE);
             user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
+
                     NotesApp.userLogged = false;
                     NotesApp.email_user = null;
                     NotesApp.password_user = null;
@@ -260,7 +294,7 @@ public class SettingsApp extends AppCompatActivity {
 
         }
     }
-
+    //Method for validate email.
     private void launchEmailConfirmations() {
         // Check for a valid email address changes.
         email = newEmail.getText().toString();
@@ -273,7 +307,7 @@ public class SettingsApp extends AppCompatActivity {
             changeEmail(email);
         }
     }
-
+    //Check attributes for password.
     private void launchPasswordConfirmation() {
 
         password = newPass.getText().toString();
@@ -294,8 +328,10 @@ public class SettingsApp extends AppCompatActivity {
         if (!hasNumber.matcher(password).find()) {
             newPass.setError(getString(R.string.error_number));
         }
-        if (isValidPass(password)) {
+        if (isValidPass(password) && old_password.getText().toString().equals(NotesApp.password_user) && isValidPass(old_password.getText().toString())) {
             changePassword(password);
+        }else if (!old_password.getText().toString().equals(NotesApp.password_user)){
+            Toast.makeText(this, getResources().getString(R.string.does_no_match), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -304,15 +340,28 @@ public class SettingsApp extends AppCompatActivity {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editable.getWindowToken(), 0);
     }
-
+    //Input valid email.
     private boolean isValidEmail(String email) {
         return email.contains("@") && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-
+    //Input valid password.
     private boolean isValidPass(String password) {
         return password.length() >= 6 && hasUppercase.matcher(password).find() && hasLowercase.matcher(password).find() &&
                 hasNumber.matcher(password).find();
 
+    }
+    //Disconnect user to app.
+    private void logout() {
+
+        FirebaseAuth.getInstance().signOut();
+
+        NotesApp.userLogged = false;
+        NotesApp.email_user = null;
+        NotesApp.password_user = null;
+
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 
