@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Button mEmailSignInButton;
     //    Declare an instance of FirebaseAuth
     private FirebaseAuth mAuth;
     //Varible for option button crete user or loggin user.
@@ -110,7 +111,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             }
         });
 
-        final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,13 +125,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             @Override
             public void onClick(View v) {
                 if (!booleanCreateUser) {
-                    booleanCreateUser = true;
-                    animatioExit();
-                    mEmailSignInButton.setText(getResources().getString(R.string.button_new_user));
+                    animatioExit(true);
                 } else {
-                    booleanCreateUser = false;
-                    animatioExit();
-                    mEmailSignInButton.setText(getResources().getString(R.string.action_sign_in));
+                    animatioExit(false);
+
                 }
 
             }
@@ -149,13 +147,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         mEmailView.setText("");
         mPasswordView.setText("Paco0000");
     }
-
+    //Close the keyboard method.
     private void closeInputManager() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
     }
-
-    private void animatioExit() {
+    //Animation exit for textview.
+    private void animatioExit(boolean b) {
+        booleanCreateUser = b;
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.left_anim);
         textCreateUser.startAnimation(animation);
 
@@ -169,8 +168,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             public void onAnimationEnd(Animation animation) {
                 if (booleanCreateUser) {
                     textCreateUser.setText(getResources().getString(R.string.account_alredy_exist));
+                    mEmailSignInButton.setText(getResources().getString(R.string.button_new_user));
                 } else {
                     textCreateUser.setText(getResources().getString(R.string.new_member));
+                    mEmailSignInButton.setText(getResources().getString(R.string.action_sign_in));
                 }
                 animationIn();
             }
@@ -181,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             }
         });
     }
-
+    //Animation in for texview.
     private void animationIn() {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.right_anim);
         textCreateUser.startAnimation(animation);
@@ -203,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
             }
         });
     }
-
+    //onStart cicle life for activity.
     @Override
     protected void onStart() {
         super.onStart();
@@ -460,8 +461,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                     return pieces[1].equals(mPassword);
                 }
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
@@ -500,6 +499,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                             Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.in_box),Toast.LENGTH_LONG);
                             toast.show();
                             showProgress(false);
+                            animatioExit(false);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -514,11 +515,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                 });
     }
 
+    //Open main activity and saves values in Notes.app.
     private void openMain(String email, String password) {
         NotesApp.email_user = email;
         NotesApp.password_user = password;
         Intent intent = new Intent(this, PrincipalActivity.class);
         startActivity(intent);
+        finish();
     }
 
     //LOGIN A EXIST USER.
@@ -555,6 +558,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
                     }
                 });
     }
+    //Change password with email notification.
     public void rememberMe(){
 
         String rememberMail = mEmailView.getText().toString();
@@ -585,6 +589,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
         }
 
     }
+    //Verifier email conditions.
     private boolean emailVerifier(FirebaseUser user) {
         return user.isEmailVerified();
     }

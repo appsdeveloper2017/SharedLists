@@ -8,10 +8,13 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appdesigndm.sharedlists.Helpers.NotesApp;
 import com.appdesigndm.sharedlists.Main.PrincipalActivity;
 import com.appdesigndm.sharedlists.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -26,6 +29,10 @@ public class SplashActivity extends AppCompatActivity {
 
         //Init variables.
         init();
+
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
 
         //Variable static is NotesApp.currentUserApp is true.
         if (startedSession() && NotesApp.currentUserApp != null) {

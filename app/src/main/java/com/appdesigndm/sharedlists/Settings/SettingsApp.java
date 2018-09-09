@@ -62,6 +62,8 @@ public class SettingsApp extends AppCompatActivity {
         setContentView(R.layout.activity_settings_app);
 
         mAuth = FirebaseAuth.getInstance();
+
+        //Falta ver si el usuario esta loggeado y ver los datos del mismo.
         init();
 
         //Item selected for spinner.
@@ -228,6 +230,7 @@ public class SettingsApp extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteAccount();
+                                finish();
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
