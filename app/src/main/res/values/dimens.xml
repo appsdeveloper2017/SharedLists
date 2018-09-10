@@ -27,4 +27,7 @@
     <dimen name="confirmations_size">18dp</dimen>
     <dimen name="separator">1dp</dimen>
     <dimen name="padding_separator">25dp</dimen>
+
+    <!--Card elevation-->
+    <dimen name="elevation">18dp</dimen>
 </resources>

@@ -30,15 +30,11 @@ public class SplashActivity extends AppCompatActivity {
         //Init variables.
         init();
 
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         //Variable static is NotesApp.currentUserApp is true.
-        if (startedSession() && NotesApp.currentUserApp != null) {
+        if (startedSession() && NotesApp.currentUserApp != null && user != null) {
 
-            //A la espera de hacer la conexión para recuperar los datos.
-            //openConectionFirebase();
             openMainActivity();
 
         } else {

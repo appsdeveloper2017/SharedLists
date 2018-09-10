@@ -3,6 +3,7 @@ package com.appdesigndm.sharedlists.Settings;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +36,7 @@ public class SettingsApp extends AppCompatActivity {
 
     //View components.
     private ProgressBar progressBar;
-    private EditText newEmail, newPass, actualPassword,old_password;
+    private EditText newEmail, newPass, actualPassword, old_password;
     private TextView confirmEmail, confirmPass, confirmDelete;
     private LinearLayout linearLayout;
     private String email;
@@ -61,9 +62,31 @@ public class SettingsApp extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_settings_app);
 
+        //Firebase connection and status.
         mAuth = FirebaseAuth.getInstance();
 
-        //Falta ver si el usuario esta loggeado y ver los datos del mismo.
+        //User status.
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+
+            // Name, email address, and profile photo Url
+            String nameUser = user.getDisplayName();
+            String emailUser = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+//             The user's ID, unique to the Firebase project. Do NOT use this value to
+//             authenticate with your backend server, if you have one. Use
+//             FirebaseUser.getToken() instead.
+            String uid = user.getUid();
+        } else {
+            logout();
+        }
+
+
+        //Init elements.
         init();
 
         //Item selected for spinner.
@@ -101,6 +124,7 @@ public class SettingsApp extends AppCompatActivity {
         });
     }
 
+    //Init elements.
     private void init() {
         //Spinner.
         spinnerSettings = (Spinner) findViewById(R.id.spinner_settings);
@@ -113,7 +137,7 @@ public class SettingsApp extends AppCompatActivity {
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
         newPass = (EditText) findViewById(R.id.password);
-        old_password = (EditText)findViewById(R.id.password_old);
+        old_password = (EditText) findViewById(R.id.password_old);
         actualPassword = (EditText) findViewById(R.id.password_for_delete);
         //Textview for onClickListeners.
         confirmEmail = (TextView) findViewById(R.id.change_email);
@@ -218,6 +242,7 @@ public class SettingsApp extends AppCompatActivity {
                         });
         builder.show();
     }
+
     //Alert Dialog delete account..
     private void alertDeleteAccount() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -297,6 +322,7 @@ public class SettingsApp extends AppCompatActivity {
 
         }
     }
+
     //Method for validate email.
     private void launchEmailConfirmations() {
         // Check for a valid email address changes.
@@ -310,6 +336,7 @@ public class SettingsApp extends AppCompatActivity {
             changeEmail(email);
         }
     }
+
     //Check attributes for password.
     private void launchPasswordConfirmation() {
 
@@ -333,7 +360,7 @@ public class SettingsApp extends AppCompatActivity {
         }
         if (isValidPass(password) && old_password.getText().toString().equals(NotesApp.password_user) && isValidPass(old_password.getText().toString())) {
             changePassword(password);
-        }else if (!old_password.getText().toString().equals(NotesApp.password_user)){
+        } else if (!old_password.getText().toString().equals(NotesApp.password_user)) {
             Toast.makeText(this, getResources().getString(R.string.does_no_match), Toast.LENGTH_SHORT).show();
         }
     }
@@ -343,16 +370,19 @@ public class SettingsApp extends AppCompatActivity {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(editable.getWindowToken(), 0);
     }
+
     //Input valid email.
     private boolean isValidEmail(String email) {
         return email.contains("@") && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
     //Input valid password.
     private boolean isValidPass(String password) {
         return password.length() >= 6 && hasUppercase.matcher(password).find() && hasLowercase.matcher(password).find() &&
                 hasNumber.matcher(password).find();
 
     }
+
     //Disconnect user to app.
     private void logout() {
 
