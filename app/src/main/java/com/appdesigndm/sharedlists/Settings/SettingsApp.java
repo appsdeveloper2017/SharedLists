@@ -3,11 +3,17 @@ package com.appdesigndm.sharedlists.Settings;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -41,6 +48,12 @@ public class SettingsApp extends AppCompatActivity {
     private LinearLayout linearLayout;
     private String email;
     private String password;
+
+    //Comppnents profile user cardview.
+    private CardView cardView;
+    private ImageView imageViewUser;
+    private TextView nameUser;
+    private TextView mailUser;
 
     //Declaration firebase.
     private FirebaseAuth mAuth;
@@ -84,7 +97,6 @@ public class SettingsApp extends AppCompatActivity {
         } else {
             logout();
         }
-
 
         //Init elements.
         init();
@@ -133,6 +145,12 @@ public class SettingsApp extends AppCompatActivity {
         myArrayAccount[1] = getResources().getString(R.string.quetion_email);
         myArrayAccount[2] = getResources().getString(R.string.question_pass);
         myArrayAccount[3] = getResources().getString(R.string.question_delete);
+
+        //Cardview elements.
+        cardView = (CardView) findViewById(R.id.cardUser);
+        imageViewUser = (ImageView) findViewById(R.id.person_photo);
+        nameUser = (TextView) findViewById(R.id.user_card_name);
+        mailUser = (TextView) findViewById(R.id.user_card_email);
 
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
@@ -397,4 +415,5 @@ public class SettingsApp extends AppCompatActivity {
         finish();
     }
 }
+
 
