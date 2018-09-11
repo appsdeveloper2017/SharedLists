@@ -5,23 +5,35 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.appdesigndm.sharedlists.Adapters.MainRecyclerAdapter;
 import com.appdesigndm.sharedlists.R;
 import com.appdesigndm.sharedlists.Settings.SettingsApp;
 
-public class PrincipalActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView mainRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mainRecycler = (RecyclerView) findViewById(R.id.main_recycler);
+        MainRecyclerAdapter adapter = new MainRecyclerAdapter(fetchMainList());
+        mainRecycler.setAdapter(adapter);
+        mainRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -31,6 +43,16 @@ public class PrincipalActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private ArrayList<MainList> fetchMainList() {
+        ArrayList<MainList> list = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            MainList item = new MainList();
+            item.setTitle("Title " + (i + 1));
+            list.add(item);
+        }
+        return list;
     }
 
     @Override

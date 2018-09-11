@@ -71,4 +71,9 @@
         <item name="android:fontFamily">@font/great_vibes</item>
     </style>
 
+    <style name="main_list">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.appdesigndm.sharedlists.Helpers.NotesApp;
-import com.appdesigndm.sharedlists.Main.PrincipalActivity;
+import com.appdesigndm.sharedlists.Main.MainActivity;
 import com.appdesigndm.sharedlists.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -72,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void openMainActivity() {
-        Intent intent = new Intent(getApplicationContext(), PrincipalActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         finish();
     }

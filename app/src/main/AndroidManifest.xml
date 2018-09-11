@@ -29,7 +29,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".Main.PrincipalActivity"
+            android:name=".Main.MainActivity"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

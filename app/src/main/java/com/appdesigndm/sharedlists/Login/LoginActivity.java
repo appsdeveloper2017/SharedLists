@@ -35,7 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appdesigndm.sharedlists.Helpers.NotesApp;
-import com.appdesigndm.sharedlists.Main.PrincipalActivity;
+import com.appdesigndm.sharedlists.Main.MainActivity;
 import com.appdesigndm.sharedlists.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -508,7 +508,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderManager.Lo
     private void openMain(String email, String password) {
         NotesApp.email_user = email;
         NotesApp.password_user = password;
-        Intent intent = new Intent(this, PrincipalActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

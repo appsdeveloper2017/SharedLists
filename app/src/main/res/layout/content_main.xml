@@ -6,6 +6,13 @@
     android:layout_height="match_parent">
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
     <!--tools:context=".Main.PrincipalActivity"-->
-    <!--tools:showIn="@layout/activity_principal">-->
+    <!--tools:showIn="@layactivity_mainipal">-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
