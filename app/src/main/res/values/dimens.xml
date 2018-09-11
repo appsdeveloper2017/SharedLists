@@ -21,13 +21,12 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!--Settings dimension-->
-    <dimen name="texview_title_settings">25dp</dimen>
-    <dimen name="textview_settings">20dp</dimen>
-    <dimen name="spinner_size">16</dimen>
-    <dimen name="confirmations_size">18dp</dimen>
+    <dimen name="textview_settings">16dp</dimen>
+    <dimen name="spinner_size">12</dimen>
+    <dimen name="confirmations_size">12dp</dimen>
     <dimen name="separator">1dp</dimen>
     <dimen name="padding_separator">25dp</dimen>
 
     <!--Card elevation-->
-    <dimen name="elevation">18dp</dimen>
+    <dimen name="elevation">10dp</dimen>
 </resources>

@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +51,8 @@ public class SettingsApp extends AppCompatActivity {
     private String password;
 
     //Comppnents profile user cardview.
-    private CardView cardView;
+    private RelativeLayout relativeLayoutUser;
     private ImageView imageViewUser;
-    private TextView nameUser;
     private TextView mailUser;
 
     //Declaration firebase.
@@ -73,7 +73,7 @@ public class SettingsApp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_settings_app);
+        setContentView(R.layout.user_settings_app);
 
         //Firebase connection and status.
         mAuth = FirebaseAuth.getInstance();
@@ -146,11 +146,10 @@ public class SettingsApp extends AppCompatActivity {
         myArrayAccount[2] = getResources().getString(R.string.question_pass);
         myArrayAccount[3] = getResources().getString(R.string.question_delete);
 
+        relativeLayoutUser = (RelativeLayout)findViewById(R.id.rLayoutUser);
         //Cardview elements.
-        cardView = (CardView) findViewById(R.id.cardUser);
-        imageViewUser = (ImageView) findViewById(R.id.person_photo);
-        nameUser = (TextView) findViewById(R.id.user_card_name);
-        mailUser = (TextView) findViewById(R.id.user_card_email);
+        imageViewUser = (ImageView) findViewById(R.id.cardPhotoUser);
+        mailUser = (TextView) findViewById(R.id.cardMailUser);
 
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
@@ -224,17 +223,20 @@ public class SettingsApp extends AppCompatActivity {
         if (user != null) {
             closeInputManager(newEmail);
             progressBar.setVisibility(View.VISIBLE);
+            relativeLayoutUser.setVisibility(View.GONE);
             linearLayout.setVisibility(View.GONE);
             user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
+                        relativeLayoutUser.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.VISIBLE);
                         noVisibleElements(0);
                         alertVerifyEmail();
                     } else {
                         progressBar.setVisibility(View.GONE);
+                        relativeLayoutUser.setVisibility(View.GONE);
                         linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_email), Toast.LENGTH_SHORT);
                         toast.show();
@@ -292,6 +294,7 @@ public class SettingsApp extends AppCompatActivity {
         if (user != null) {
             closeInputManager(newEmail);
             progressBar.setVisibility(View.VISIBLE);
+            relativeLayoutUser.setVisibility(View.GONE);
             linearLayout.setVisibility(View.GONE);
             user.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -299,12 +302,14 @@ public class SettingsApp extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         NotesApp.password_user = password;
                         progressBar.setVisibility(View.GONE);
+                        relativeLayoutUser.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.change_pass), Toast.LENGTH_SHORT);
                         toast.show();
                         noVisibleElements(0);
                     } else {
                         progressBar.setVisibility(View.GONE);
+                        relativeLayoutUser.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_pass), Toast.LENGTH_SHORT);
                         toast.show();
@@ -318,6 +323,8 @@ public class SettingsApp extends AppCompatActivity {
     public void deleteAccount() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && actualPassword.getText().toString().equals(NotesApp.password_user)) {
+            progressBar.setVisibility(View.VISIBLE);
+            relativeLayoutUser.setVisibility(View.GONE);
             linearLayout.setVisibility(View.GONE);
             user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
