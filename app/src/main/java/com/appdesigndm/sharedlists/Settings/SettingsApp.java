@@ -40,6 +40,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class SettingsApp extends AppCompatActivity {
 
     //View components.
@@ -50,10 +52,11 @@ public class SettingsApp extends AppCompatActivity {
     private String email;
     private String password;
 
-    //Comppnents profile user cardview.
+    //Components profile user cardview.
     private RelativeLayout relativeLayoutUser;
-    private ImageView imageViewUser;
+    private CircleImageView imageViewUser;
     private TextView mailUser;
+    private TextView notes, sharedNotes, votes;
 
     //Declaration firebase.
     private FirebaseAuth mAuth;
@@ -78,13 +81,16 @@ public class SettingsApp extends AppCompatActivity {
         //Firebase connection and status.
         mAuth = FirebaseAuth.getInstance();
 
+        //Init elements.
+        init();
+
         //User status.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
             // Name, email address, and profile photo Url
             String nameUser = user.getDisplayName();
-            String emailUser = user.getEmail();
+            mailUser.setText(user.getEmail());
             Uri photoUrl = user.getPhotoUrl();
 
             // Check if user's email is verified
@@ -97,9 +103,6 @@ public class SettingsApp extends AppCompatActivity {
         } else {
             logout();
         }
-
-        //Init elements.
-        init();
 
         //Item selected for spinner.
         spinnerSettings.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, myArrayAccount));
@@ -146,24 +149,33 @@ public class SettingsApp extends AppCompatActivity {
         myArrayAccount[2] = getResources().getString(R.string.question_pass);
         myArrayAccount[3] = getResources().getString(R.string.question_delete);
 
+        //Content for elements.
         relativeLayoutUser = (RelativeLayout)findViewById(R.id.rLayoutUser);
+
         //Cardview elements.
-        imageViewUser = (ImageView) findViewById(R.id.cardPhotoUser);
+        imageViewUser = (CircleImageView) findViewById(R.id.cardPhotoUser);
         mailUser = (TextView) findViewById(R.id.cardMailUser);
+        notes = (TextView) findViewById(R.id.item_list);
+        sharedNotes = (TextView) findViewById(R.id.item_shared);
+        votes = (TextView)findViewById(R.id.item_votes);
 
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
         newPass = (EditText) findViewById(R.id.password);
         old_password = (EditText) findViewById(R.id.password_old);
         actualPassword = (EditText) findViewById(R.id.password_for_delete);
+
         //Textview for onClickListeners.
         confirmEmail = (TextView) findViewById(R.id.change_email);
         confirmPass = (TextView) findViewById(R.id.change_pass);
         confirmDelete = (TextView) findViewById(R.id.delete_account);
+
         //Linearlayout components.
         linearLayout = (LinearLayout) findViewById(R.id.linear_settings);
+
         //Progressbar
         progressBar = (ProgressBar) findViewById(R.id.settings_progress);
+
         noVisibleElements(0);
     }
 

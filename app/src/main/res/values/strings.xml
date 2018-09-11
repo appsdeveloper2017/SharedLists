@@ -49,10 +49,13 @@
     <string name="change_pass">Password changed</string>
     <string name="error_change_pass">Ups error in the changes</string>
     <string name="what_changes">What changes you want to make in your account?</string>
-    <string name="select_item">Select item...</string>
+    <string name="select_item">Select item…</string>
     <string name="validate_ac">It is necessary to validate the account through email!</string>
     <string name="old_password">Old password</string>
     <string name="does_no_match">The old password does not match</string>
+    <string name="note">Notes</string>
+    <string name="shared_notes">Shared notes</string>
+    <string name="votes">Vote</string>
 
     <!--Strings related settings Dialog Builder-->
     <string name="title">Change account</string>

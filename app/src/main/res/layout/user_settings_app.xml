@@ -26,6 +26,7 @@
         android:id="@+id/rLayoutUser"
         android:layout_width="match_parent"
         android:layout_height="350dp"
+        android:background="@drawable/background_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,13 +37,16 @@
             android:background="@color/start"
             android:orientation="vertical">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/cardPhotoUser"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="35dp"
-                android:src="@drawable/rivera" />
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#fff"
+                android:src="@drawable/rivera"/>
 
             <TextView
                 android:id="@+id/cardMailUser"
@@ -50,7 +54,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="manolo@gmail.com"
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -63,7 +66,8 @@
             android:layout_marginEnd="@dimen/xlarge_margin"
             android:layout_marginStart="@dimen/xlarge_margin"
             android:layout_marginTop="200dp"
-            android:elevation="10dp">
+            android:elevation="10dp"
+            app:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,12 +83,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Listas"
+                        android:text="@string/note"
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/item_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -102,12 +108,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/shared"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Listas"
+                        android:text="@string/shared_notes"
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/item_shared"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -125,12 +133,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/votes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Listas"
+                        android:text="@string/votes"
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/item_votes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -146,10 +156,6 @@
     <LinearLayout
         android:id="@+id/linear_settings"
         style="@style/AbsoluteLinear"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rLayoutUser">
@@ -163,7 +169,7 @@
 
         <Spinner
             android:id="@+id/spinner_settings"
-            style="@style/SpinnerSettings"></Spinner>
+            style="@style/SpinnerSettings"/>
 
         <EditText
             android:id="@+id/mail"
@@ -179,33 +185,29 @@
             android:id="@+id/password_old"
             style="@style/EditSettings"
             android:hint="@string/old_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"/>
 
         <EditText
             android:id="@+id/password"
             style="@style/EditSettings"
             android:hint="@string/input_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"/>
 
         <TextView
             android:id="@+id/change_pass"
             style="@style/TextSettings"
-            android:text="@string/validate_ema_pass" />
+            android:text="@string/validate_ema_pass"/>
 
         <EditText
             android:id="@+id/password_for_delete"
             style="@style/EditSettings"
             android:hint="@string/confirm_pass"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"/>
 
         <TextView
             android:id="@+id/delete_account"
             style="@style/TextSettings"
-            android:text="@string/confirm_delete_account" />
-
-        <View
-            style="@style/Separators"
-            android:layout_marginTop="@dimen/xlarge_margin" />
+            android:text="@string/confirm_delete_account"/>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
