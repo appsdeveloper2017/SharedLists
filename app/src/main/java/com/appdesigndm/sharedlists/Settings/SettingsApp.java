@@ -47,8 +47,9 @@ public class SettingsApp extends AppCompatActivity {
     //View components.
     private ProgressBar progressBar;
     private EditText newEmail, newPass, actualPassword, old_password;
-    private TextView confirmEmail, confirmPass, confirmDelete;
-    private LinearLayout linearLayout;
+    private TextView optionMail, optionPassword, optionDelete, confirmEmail, confirmPass, confirmDelete;
+    private LinearLayout alternativeLinear;
+    private LinearLayout layoutEmailVisible, layoutPasswordVisible, layoutDeleteVisible;
     private String email;
     private String password;
 
@@ -60,10 +61,6 @@ public class SettingsApp extends AppCompatActivity {
 
     //Declaration firebase.
     private FirebaseAuth mAuth;
-
-    //Array spinner options settings account user.
-    private String[] myArrayAccount = new String[4];
-    private Spinner spinnerSettings;
 
     //Requeriments of email and pass.
     private final Pattern hasUppercase = Pattern.compile("[A-Z]");
@@ -103,18 +100,22 @@ public class SettingsApp extends AppCompatActivity {
         } else {
             logout();
         }
-
-        //Item selected for spinner.
-        spinnerSettings.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, myArrayAccount));
-        spinnerSettings.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        optionMail.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                noVisibleElements(position);
+            public void onClick(View v) {
+                noVisibleElements(2);
             }
-
+        });
+        optionPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                noVisibleElements(3);
+            }
+        });
+        optionDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                noVisibleElements(4);
             }
         });
 
@@ -141,23 +142,27 @@ public class SettingsApp extends AppCompatActivity {
 
     //Init elements.
     private void init() {
-        //Spinner.
-        spinnerSettings = (Spinner) findViewById(R.id.spinner_settings);
-        //Array Spinner.
-        myArrayAccount[0] = getResources().getString(R.string.select_item);
-        myArrayAccount[1] = getResources().getString(R.string.quetion_email);
-        myArrayAccount[2] = getResources().getString(R.string.question_pass);
-        myArrayAccount[3] = getResources().getString(R.string.question_delete);
 
         //Content for elements.
-        relativeLayoutUser = (RelativeLayout)findViewById(R.id.rLayoutUser);
+        relativeLayoutUser = (RelativeLayout) findViewById(R.id.rLayoutUser);
+        alternativeLinear = (LinearLayout) findViewById(R.id.alternative_linear);
 
         //Cardview elements.
         imageViewUser = (CircleImageView) findViewById(R.id.cardPhotoUser);
+        imageViewUser.setImageResource(R.drawable.rivera);
         mailUser = (TextView) findViewById(R.id.cardMailUser);
         notes = (TextView) findViewById(R.id.item_list);
         sharedNotes = (TextView) findViewById(R.id.item_shared);
-        votes = (TextView)findViewById(R.id.item_votes);
+        votes = (TextView) findViewById(R.id.item_votes);
+
+        //Layout Visible or Gone componets.
+        layoutEmailVisible = (LinearLayout) findViewById(R.id.vistaEmailVisible);
+        layoutPasswordVisible = (LinearLayout) findViewById(R.id.vistaPassVisible);
+        layoutDeleteVisible = (LinearLayout) findViewById(R.id.vistaDeleteVisible);
+
+        optionMail = (TextView) findViewById(R.id.desplegableEmail);
+        optionPassword = (TextView) findViewById(R.id.desplegablePass);
+        optionDelete = (TextView) findViewById(R.id.desplegableDeleteAccount);
 
         //Editable text
         newEmail = (EditText) findViewById(R.id.mail);
@@ -170,9 +175,6 @@ public class SettingsApp extends AppCompatActivity {
         confirmPass = (TextView) findViewById(R.id.change_pass);
         confirmDelete = (TextView) findViewById(R.id.delete_account);
 
-        //Linearlayout components.
-        linearLayout = (LinearLayout) findViewById(R.id.linear_settings);
-
         //Progressbar
         progressBar = (ProgressBar) findViewById(R.id.settings_progress);
 
@@ -183,49 +185,42 @@ public class SettingsApp extends AppCompatActivity {
     private void noVisibleElements(int position) {
         switch (position) {
             case 0:
-                newEmail.setVisibility(View.GONE);
-                confirmEmail.setVisibility(View.GONE);
-
-                old_password.setVisibility(View.GONE);
-                newPass.setVisibility(View.GONE);
-                confirmPass.setVisibility(View.GONE);
-
-                actualPassword.setVisibility(View.GONE);
-                confirmDelete.setVisibility(View.GONE);
+                relativeLayoutUser.setVisibility(View.VISIBLE);
+                alternativeLinear.setVisibility(View.VISIBLE);
+                layoutEmailVisible.setVisibility(View.GONE);
+                layoutPasswordVisible.setVisibility(View.GONE);
+                layoutDeleteVisible.setVisibility(View.GONE);
                 break;
             case 1:
-                newEmail.setVisibility(View.VISIBLE);
-                confirmEmail.setVisibility(View.VISIBLE);
-
-                old_password.setVisibility(View.GONE);
-                newPass.setVisibility(View.GONE);
-                confirmPass.setVisibility(View.GONE);
-
-                actualPassword.setVisibility(View.GONE);
-                confirmDelete.setVisibility(View.GONE);
+                alternativeLinear.setVisibility(View.GONE);
+                relativeLayoutUser.setVisibility(View.GONE);
                 break;
             case 2:
-                newEmail.setVisibility(View.GONE);
-                confirmEmail.setVisibility(View.GONE);
+                relativeLayoutUser.setVisibility(View.VISIBLE);
+                alternativeLinear.setVisibility(View.VISIBLE);
 
-                old_password.setVisibility(View.VISIBLE);
-                newPass.setVisibility(View.VISIBLE);
-                confirmPass.setVisibility(View.VISIBLE);
-
-                actualPassword.setVisibility(View.GONE);
-                confirmDelete.setVisibility(View.GONE);
+                layoutEmailVisible.setVisibility(View.VISIBLE);
+                layoutPasswordVisible.setVisibility(View.GONE);
+                layoutDeleteVisible.setVisibility(View.GONE);
                 break;
             case 3:
-                newEmail.setVisibility(View.GONE);
-                confirmEmail.setVisibility(View.GONE);
+                relativeLayoutUser.setVisibility(View.VISIBLE);
+                alternativeLinear.setVisibility(View.VISIBLE);
 
-                old_password.setVisibility(View.GONE);
-                newPass.setVisibility(View.GONE);
-                confirmPass.setVisibility(View.GONE);
-
-                actualPassword.setVisibility(View.VISIBLE);
-                confirmDelete.setVisibility(View.VISIBLE);
+                layoutEmailVisible.setVisibility(View.GONE);
+                layoutPasswordVisible.setVisibility(View.VISIBLE);
+                layoutDeleteVisible.setVisibility(View.GONE);
                 break;
+            case 4:
+                relativeLayoutUser.setVisibility(View.VISIBLE);
+                alternativeLinear.setVisibility(View.VISIBLE);
+
+                layoutEmailVisible.setVisibility(View.GONE);
+                layoutPasswordVisible.setVisibility(View.GONE);
+                layoutDeleteVisible.setVisibility(View.VISIBLE);
+                break;
+
+
         }
     }
 
@@ -235,21 +230,18 @@ public class SettingsApp extends AppCompatActivity {
         if (user != null) {
             closeInputManager(newEmail);
             progressBar.setVisibility(View.VISIBLE);
-            relativeLayoutUser.setVisibility(View.GONE);
-            linearLayout.setVisibility(View.GONE);
+            noVisibleElements(1);
             user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         progressBar.setVisibility(View.GONE);
-                        relativeLayoutUser.setVisibility(View.VISIBLE);
-                        linearLayout.setVisibility(View.VISIBLE);
                         noVisibleElements(0);
                         alertVerifyEmail();
                     } else {
                         progressBar.setVisibility(View.GONE);
                         relativeLayoutUser.setVisibility(View.GONE);
-                        linearLayout.setVisibility(View.VISIBLE);
+//                        linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_email), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -306,8 +298,7 @@ public class SettingsApp extends AppCompatActivity {
         if (user != null) {
             closeInputManager(newEmail);
             progressBar.setVisibility(View.VISIBLE);
-            relativeLayoutUser.setVisibility(View.GONE);
-            linearLayout.setVisibility(View.GONE);
+            noVisibleElements(1);
             user.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -315,14 +306,14 @@ public class SettingsApp extends AppCompatActivity {
                         NotesApp.password_user = password;
                         progressBar.setVisibility(View.GONE);
                         relativeLayoutUser.setVisibility(View.VISIBLE);
-                        linearLayout.setVisibility(View.VISIBLE);
+                        layoutPasswordVisible.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.change_pass), Toast.LENGTH_SHORT);
                         toast.show();
                         noVisibleElements(0);
                     } else {
                         progressBar.setVisibility(View.GONE);
                         relativeLayoutUser.setVisibility(View.VISIBLE);
-                        linearLayout.setVisibility(View.VISIBLE);
+                        layoutPasswordVisible.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_pass), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -336,8 +327,7 @@ public class SettingsApp extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null && actualPassword.getText().toString().equals(NotesApp.password_user)) {
             progressBar.setVisibility(View.VISIBLE);
-            relativeLayoutUser.setVisibility(View.GONE);
-            linearLayout.setVisibility(View.GONE);
+            noVisibleElements(1);
             user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
