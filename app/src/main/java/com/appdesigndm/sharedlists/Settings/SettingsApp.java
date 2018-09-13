@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
@@ -54,6 +55,9 @@ public class SettingsApp extends AppCompatActivity {
     private String password;
 
     //Components profile user cardview.
+    private boolean invisibleElementsEmail;
+    private boolean isInvisibleElementsPass;
+    private boolean isInvisibleElementsDelete;
     private RelativeLayout relativeLayoutUser;
     private CircleImageView imageViewUser;
     private TextView mailUser;
@@ -83,15 +87,15 @@ public class SettingsApp extends AppCompatActivity {
 
         //User status.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        boolean emailVerified = user.isEmailVerified();
 
-            // Name, email address, and profile photo Url
+        if (user!=null && emailVerified) {
+
             String nameUser = user.getDisplayName();
-            mailUser.setText(user.getEmail());
-            Uri photoUrl = user.getPhotoUrl();
 
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
+            mailUser.setText(user.getEmail());
+
+            Uri photoUrl = user.getPhotoUrl();
 
 //             The user's ID, unique to the Firebase project. Do NOT use this value to
 //             authenticate with your backend server, if you have one. Use
@@ -103,19 +107,43 @@ public class SettingsApp extends AppCompatActivity {
         optionMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noVisibleElements(2);
+                if (invisibleElementsEmail) {
+                    noVisibleElements(2);
+                    invisibleElementsEmail = false;
+                } else {
+                    noVisibleElements(0);
+                    closeInputManager(newEmail);
+                    clearText();
+                    invisibleElementsEmail = true;
+                }
             }
         });
         optionPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noVisibleElements(3);
+                if (isInvisibleElementsPass) {
+                    noVisibleElements(3);
+                    isInvisibleElementsPass = false;
+                } else {
+                    noVisibleElements(0);
+                    closeInputManager(newPass);
+                    clearText();
+                    isInvisibleElementsPass = true;
+                }
             }
         });
         optionDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                noVisibleElements(4);
+                if (isInvisibleElementsDelete) {
+                    noVisibleElements(4);
+                    isInvisibleElementsDelete = false;
+                } else {
+                    noVisibleElements(0);
+                    closeInputManager(actualPassword);
+                    clearText();
+                    isInvisibleElementsDelete = true;
+                }
             }
         });
 
@@ -149,7 +177,7 @@ public class SettingsApp extends AppCompatActivity {
 
         //Cardview elements.
         imageViewUser = (CircleImageView) findViewById(R.id.cardPhotoUser);
-        imageViewUser.setImageResource(R.drawable.rivera);
+        imageViewUser.setImageResource(R.drawable.perfil);
         mailUser = (TextView) findViewById(R.id.cardMailUser);
         notes = (TextView) findViewById(R.id.item_list);
         sharedNotes = (TextView) findViewById(R.id.item_shared);
@@ -159,6 +187,10 @@ public class SettingsApp extends AppCompatActivity {
         layoutEmailVisible = (LinearLayout) findViewById(R.id.vistaEmailVisible);
         layoutPasswordVisible = (LinearLayout) findViewById(R.id.vistaPassVisible);
         layoutDeleteVisible = (LinearLayout) findViewById(R.id.vistaDeleteVisible);
+
+        invisibleElementsEmail = true;
+        isInvisibleElementsPass = true;
+        isInvisibleElementsDelete = true;
 
         optionMail = (TextView) findViewById(R.id.desplegableEmail);
         optionPassword = (TextView) findViewById(R.id.desplegablePass);
@@ -240,7 +272,7 @@ public class SettingsApp extends AppCompatActivity {
                         alertVerifyEmail();
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        relativeLayoutUser.setVisibility(View.GONE);
+                        relativeLayoutUser.setVisibility(View.VISIBLE);
 //                        linearLayout.setVisibility(View.VISIBLE);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_email), Toast.LENGTH_SHORT);
                         toast.show();
@@ -290,7 +322,6 @@ public class SettingsApp extends AppCompatActivity {
                 });
         builder.show();
     }
-
 
     //Change pass in firebase.
     private void changePassword(final String password) {
@@ -422,6 +453,13 @@ public class SettingsApp extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void clearText() {
+        newEmail.setText("");
+        old_password.setText("");
+        newPass.setText("");
+        actualPassword.setText("");
     }
 }
 
