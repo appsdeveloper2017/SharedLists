@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.appdesigndm.sharedlists.Main.MainList;
+import com.appdesigndm.sharedlists.Models.MainListsModel;
 import com.appdesigndm.sharedlists.R;
 
 public class MainViewHolder extends RecyclerView.ViewHolder {
@@ -17,7 +18,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         mainTitle = itemView.findViewById(R.id.title_main);
     }
 
-    public void bindMainViewHolder(MainList list) {
-        mainTitle.setText(list.getTitle());
+    public void bindMainViewHolder(MainListsModel list) {
+        mainTitle.setText(list.getListName());
     }
 }

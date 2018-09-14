@@ -42,4 +42,8 @@
     <string name="change_pass">Password changed</string>
     <string name="error_change_pass">Ups error in the changes</string>
 
+    <!-- Main activity -->
+    <string name="main_activity_title">Your lists</string>
+    <string name="main_activity_title_no_lists">Your lists</string>
+
 </resources>

@@ -7,16 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appdesigndm.sharedlists.Holders.MainViewHolder;
-import com.appdesigndm.sharedlists.Main.MainList;
+import com.appdesigndm.sharedlists.Models.MainListsModel;
 import com.appdesigndm.sharedlists.R;
 
 import java.util.ArrayList;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
-    private ArrayList<MainList> list;
+    private ArrayList<MainListsModel> list;
 
-    public MainRecyclerAdapter(ArrayList<MainList> list) {
+    public MainRecyclerAdapter(ArrayList<MainListsModel> list) {
         this.list = list;
     }
 
@@ -33,7 +33,7 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        MainList item = list.get(position);
+        MainListsModel item = list.get(position);
         holder.bindMainViewHolder(item);
     }
 

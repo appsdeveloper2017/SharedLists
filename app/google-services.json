@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "292934231072-lgnc550q57ajksr026541iqdp6vroq40.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appdesigndm.sharedlists",
+            "certificate_hash": "f0005ca6d5eab03311011434e95cbc482113e2e8"
+          }
+        },
+        {
           "client_id": "292934231072-binkf7smdtm5f15h5ccm9244vgfuu0mj.apps.googleusercontent.com",
           "client_type": 3
         }

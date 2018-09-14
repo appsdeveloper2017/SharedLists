@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.appdesigndm.sharedlists.Adapters.MainRecyclerAdapter;
+import com.appdesigndm.sharedlists.Helpers.NotesApp;
+import com.appdesigndm.sharedlists.Models.MainListsModel;
 import com.appdesigndm.sharedlists.R;
 import com.appdesigndm.sharedlists.Settings.SettingsApp;
 
@@ -28,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.main_activity_title));
         setSupportActionBar(toolbar);
 
         mainRecycler = (RecyclerView) findViewById(R.id.main_recycler);
-        MainRecyclerAdapter adapter = new MainRecyclerAdapter(fetchMainList());
+        MainRecyclerAdapter adapter = new MainRecyclerAdapter(NotesApp.user.getLists());
         mainRecycler.setAdapter(adapter);
         mainRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
@@ -45,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<MainList> fetchMainList() {
-        ArrayList<MainList> list = new ArrayList<>();
+    private ArrayList<MainListsModel> fetchMainList() {
+        ArrayList<MainListsModel> list = new ArrayList<>();
         for (int i=0; i<10; i++) {
-            MainList item = new MainList();
-            item.setTitle("Title " + (i + 1));
+            MainListsModel item = new MainListsModel();
+            item.setListName("Title " + (i + 1));
             list.add(item);
         }
         return list;
