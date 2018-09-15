@@ -32,4 +32,5 @@
 
     <!--Card elevation-->
     <dimen name="elevation">10dp</dimen>
+    <dimen name="main_relative_height">350dp</dimen>
 </resources>

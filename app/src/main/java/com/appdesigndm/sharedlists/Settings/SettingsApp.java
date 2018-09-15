@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -104,6 +105,12 @@ public class SettingsApp extends AppCompatActivity {
         } else {
             logout();
         }
+        imageViewUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadImage();
+            }
+        });
         optionMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +173,22 @@ public class SettingsApp extends AppCompatActivity {
                 alertDeleteAccount();
             }
         });
+    }
+    //Search image in resoures of phone.
+    private void loadImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(intent.createChooser(intent,"Select program"),10);
+    }
+    //Override method onActivityResult for request image.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            Uri path = data.getData();
+            imageViewUser.setImageURI(path);
+
+        }
     }
 
     //Init elements.
