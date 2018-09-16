@@ -1,12 +1,15 @@
 package com.appdesigndm.sharedlists.Settings;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -36,16 +40,30 @@ import com.appdesigndm.sharedlists.Login.LoginActivity;
 import com.appdesigndm.sharedlists.Login.SplashActivity;
 import com.appdesigndm.sharedlists.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsApp extends AppCompatActivity {
 
+    private String TAG = "Error";
     //View components.
     private ProgressBar progressBar;
     private EditText newEmail, newPass, actualPassword, old_password;
@@ -67,6 +85,10 @@ public class SettingsApp extends AppCompatActivity {
     //Declaration firebase.
     private FirebaseAuth mAuth;
 
+    //Storage Firebase.
+    private StorageReference mStorageRef;
+    private Uri path;
+
     //Requeriments of email and pass.
     private final Pattern hasUppercase = Pattern.compile("[A-Z]");
     private final Pattern hasLowercase = Pattern.compile("[a-z]");
@@ -80,31 +102,53 @@ public class SettingsApp extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.user_settings_app);
 
-        //Firebase connection and status.
+        //Firebase auth connection and status.
         mAuth = FirebaseAuth.getInstance();
+
+        //Declaration storage firebase.
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
         //Init elements.
         init();
 
         //User status.
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //Validate email.
         boolean emailVerified = user.isEmailVerified();
 
-        if (user!=null && emailVerified) {
-
-            String nameUser = user.getDisplayName();
+        if (user != null && emailVerified) {
 
             mailUser.setText(user.getEmail());
 
             Uri photoUrl = user.getPhotoUrl();
 
+            if (photoUrl == null) {
+
+                imageViewUser.setImageResource(R.drawable.perfil);
+
+            } else {
+
+                try {
+
+                    new DownloadImageTask(imageViewUser).execute(photoUrl.toString());
+
+                } catch (Exception e) {
+
+                    imageViewUser.setImageResource(R.drawable.perfil);
+                }
+            }
+
 //             The user's ID, unique to the Firebase project. Do NOT use this value to
 //             authenticate with your backend server, if you have one. Use
 //             FirebaseUser.getToken() instead.
-            String uid = user.getUid();
+//                String uid = user.getUid();
+
+
         } else {
             logout();
         }
+
         imageViewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,22 +217,6 @@ public class SettingsApp extends AppCompatActivity {
                 alertDeleteAccount();
             }
         });
-    }
-    //Search image in resoures of phone.
-    private void loadImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/");
-        startActivityForResult(intent.createChooser(intent,"Select program"),10);
-    }
-    //Override method onActivityResult for request image.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==RESULT_OK){
-            Uri path = data.getData();
-            imageViewUser.setImageURI(path);
-
-        }
     }
 
     //Init elements.
@@ -274,8 +302,6 @@ public class SettingsApp extends AppCompatActivity {
                 layoutPasswordVisible.setVisibility(View.GONE);
                 layoutDeleteVisible.setVisibility(View.VISIBLE);
                 break;
-
-
         }
     }
 
@@ -334,7 +360,7 @@ public class SettingsApp extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteAccount();
-                                finish();
+                                alert.dismiss();
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -391,13 +417,14 @@ public class SettingsApp extends AppCompatActivity {
                     NotesApp.password_user = null;
 
                     mAuth.signOut();
+                    finishAffinity();
 
                     Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                     startActivity(intent);
                 }
-
             });
         } else {
+            actualPassword.setText("");
             Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.equals_pass), Toast.LENGTH_SHORT);
             toast.show();
 
@@ -478,12 +505,154 @@ public class SettingsApp extends AppCompatActivity {
         finish();
     }
 
+    //Clear all editText.
     private void clearText() {
         newEmail.setText("");
         old_password.setText("");
         newPass.setText("");
         actualPassword.setText("");
     }
+
+    //Search image in resoures of phone.
+    private void loadImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(intent.createChooser(intent, "Select program"), 10);
+    }
+
+    //Override method onActivityResult for request image.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+            //Directory for photo.
+            path = data.getData();
+            //Upload photo to firebase storage.
+            uploadFile(File.separator + "ImageProfile" + File.separator + NotesApp.email_user);
+        }
+    }
+
+    //Upload photo to firebase storage.
+    private void uploadFile(final String pathRoute) {
+
+        if (path != null) {
+
+            noVisibleElements(1);
+            progressBar.setVisibility(View.VISIBLE);
+
+            final StorageReference ref = mStorageRef.child(pathRoute);
+            ref.putFile(path)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            noVisibleElements(0);
+                            progressBar.setVisibility(View.GONE);
+                            //Get url from image.
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            //Method updateProfile.
+                            updateProfile(downloadUrl);
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_succeful), Toast.LENGTH_LONG);
+                            toast.show();
+                            new DownloadImageTask(imageViewUser).execute(downloadUrl.toString());
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                            noVisibleElements(0);
+                            progressBar.setVisibility(View.GONE);
+
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_failed), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        }
+                    });
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.upload_failed), Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+    //Update profile user.
+    public void updateProfile(final Uri downloadUrl) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                //No use this line for name for user.
+                // .setDisplayName("Jane Q. User")
+                .setPhotoUri(downloadUrl)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
+    }
+
+    //Download image for circle imageView with AsyncTask.
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        CircleImageView bmImage;
+
+        public DownloadImageTask(CircleImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            imageViewUser.setImageBitmap(result);
+        }
+    }
 }
 
+//Falta configurar que al borrar la cuenta se borre la foto.
+
+
+    //When delete profile, delete photo porfile with firebase.
+//    public void deleteImageFirebase(){
+//
+//        // Create a storage reference from our app
+//        mStorageRef = FirebaseStorage.getInstance().getReference();
+//
+//        // Create a reference to the file to delete
+//        StorageReference desertRef = mStorageRef.child(File.separator + "ImageProfile" + File.separator + NotesApp.email_user);
+//        // Delete the file
+//        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Toast toast = Toast.makeText(getApplicationContext(),"Borrada",Toast.LENGTH_LONG);
+//                toast.show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Uh-oh, an error occurred!
+//            }
+//        });
+//    }
+//}
 

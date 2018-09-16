@@ -67,6 +67,10 @@
     <string name="title_delete">Important notice</string>
     <string name="message_delete">You are going to delete the application and your user account, are you sure?</string>
     <string name="no">No</string>
+
+    <!--Strings upload photo-->
+    <string name="upload_succeful">Image successfully uploaded to the server</string>
+    <string name="upload_failed">Error uploading the image, try again.</string>
     
     <!--Main strings-->
     <string name="recovering_notes">Recovering notes, please wait...</string>
