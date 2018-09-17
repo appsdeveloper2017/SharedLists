@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         dbr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                NotesApp.user = dataSnapshot.getValue(UserModel.class);
+                NotesApp.currentUserModel = dataSnapshot.getValue(UserModel.class);
                 openMainActivity();
             }
 

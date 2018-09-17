@@ -1,20 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/title_main"
-        style="@style/main_list"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/container_title_main"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Titulo main"/>
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/title_main"
+            style="@style/main_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="85"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:visibility="visible"
+            tools:text="Titulo mainfgvhbjnkj"/>
+
+        <ImageView
+            android:id="@+id/delete_item_main"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="15"
+            android:visibility="visible"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/ic_delete"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_edit_text_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/edit_text_title_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="85"
+            android:hint="New list"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/add_item_main"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="15"
+            android:visibility="visible"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/ic_generic_add_not_selectable"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

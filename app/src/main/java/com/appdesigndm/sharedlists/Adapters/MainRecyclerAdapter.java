@@ -33,12 +33,15 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainViewHolder holder, int position) {
-        MainListsModel item = list.get(position);
-        holder.bindMainViewHolder(item);
+        if(position <= list.size()) {
+            MainListsModel item = list.get(position);
+            holder.bindMainViewHolder(item);
+        } else {
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return (list.size() + 1);
     }
 }
