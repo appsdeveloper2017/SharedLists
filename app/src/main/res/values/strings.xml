@@ -17,15 +17,16 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="new_member">You are not a member? creat your account...</string>
+    <string name="error">An error has occurred</string>
+    <string name="new_member">You are not a member? creat your account…</string>
     <string name="button_new_user">Create new user</string>
     <string name="account_alredy_exist">I am already a user, I have an account</string>
     <string name="title_activity_principal">Hello again!</string>
-    <string name="remember_me">Remember me...</string>
-    <string name="remember_email_send">Email sent...</string>
+    <string name="remember_me">Remember me…</string>
+    <string name="remember_email_send">Email sent…</string>
     <string name="error_remember_mail_send">Error sending the message, something has failed!</string>
     <string name="error_mail_required">Enter a valid email to reset the password</string>
-    <string name="validate_email">Check your inbox and confirm your email address and try again...</string>
+    <string name="validate_email">Check your inbox and confirm your email address and try again…</string>
     <string name="in_box">Check your inbox and confirm your email address</string>
 
     <!--Menu Settings strings-->
@@ -61,7 +62,7 @@
     <string name="title">Change account</string>
     <string name="validate_other_account">You have successfully changed the account, we have sent you a validation email for the new account.
         The application will close and you have to return to login.</string>
-    <string name="ok">Ok!</string>
+    <string name="ok">OK!</string>
 
     <!--Strings related delete app-->
     <string name="title_delete">Important notice</string>
@@ -71,8 +72,12 @@
     <!--Strings upload photo-->
     <string name="upload_succeful">Image successfully uploaded to the server</string>
     <string name="upload_failed">Error uploading the image, try again.</string>
+
+    <!--Strings related for delete photo-->
+    <string name="delete_image_succeful">Image profile deleted!</string>
+    <string name="delete_image_error">Error for delete image profile</string>
     
     <!--Main strings-->
-    <string name="recovering_notes">Recovering notes, please wait...</string>
+    <string name="recovering_notes">Recovering notes, please wait…</string>
 
 </resources>

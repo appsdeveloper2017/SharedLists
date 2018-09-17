@@ -21,16 +21,22 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!--Settings dimension-->
+    <dimen name="main_relative_height">350dp</dimen>
+    <dimen name="principal_layout_height">250dp</dimen>
+
+    <dimen name="photo_witdh">120dp</dimen>
+    <dimen name="photo_height">120dp</dimen>
+    <dimen name="photo_margin_top">35dp</dimen>
+    <dimen name="photo_border">2dp</dimen>
+
     <dimen name="margin_top_horintal_linear">20dp</dimen>
     <dimen name="textview_padding_left">20dp</dimen>
     <dimen name="padding_left">25dp</dimen>
     <dimen name="size_icons">36dp</dimen>
     <dimen name="textview_settings">16dp</dimen>
-    <dimen name="spinner_size">12</dimen>
     <dimen name="confirmations_size">12dp</dimen>
     <dimen name="padding_separator">25dp</dimen>
 
     <!--Card elevation-->
     <dimen name="elevation">10dp</dimen>
-    <dimen name="main_relative_height">350dp</dimen>
 </resources>

@@ -1,37 +1,26 @@
 package com.appdesigndm.sharedlists.Settings;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,15 +37,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -88,6 +74,7 @@ public class SettingsApp extends AppCompatActivity {
     //Storage Firebase.
     private StorageReference mStorageRef;
     private Uri path;
+    private Uri photoUrl;
 
     //Requeriments of email and pass.
     private final Pattern hasUppercase = Pattern.compile("[A-Z]");
@@ -121,7 +108,7 @@ public class SettingsApp extends AppCompatActivity {
 
             mailUser.setText(user.getEmail());
 
-            Uri photoUrl = user.getPhotoUrl();
+            photoUrl = user.getPhotoUrl();
 
             if (photoUrl == null) {
 
@@ -138,13 +125,10 @@ public class SettingsApp extends AppCompatActivity {
                     imageViewUser.setImageResource(R.drawable.perfil);
                 }
             }
-
-//             The user's ID, unique to the Firebase project. Do NOT use this value to
+            //             The user's ID, unique to the Firebase project. Do NOT use this value to
 //             authenticate with your backend server, if you have one. Use
 //             FirebaseUser.getToken() instead.
 //                String uid = user.getUid();
-
-
         } else {
             logout();
         }
@@ -321,8 +305,7 @@ public class SettingsApp extends AppCompatActivity {
                         alertVerifyEmail();
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        relativeLayoutUser.setVisibility(View.VISIBLE);
-//                        linearLayout.setVisibility(View.VISIBLE);
+                        noVisibleElements(0);
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_change_email), Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -359,8 +342,10 @@ public class SettingsApp extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                deleteAccount();
+
                                 alert.dismiss();
+                                deleteImageFirebase();
+
                             }
                         })
                 .setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -404,18 +389,20 @@ public class SettingsApp extends AppCompatActivity {
 
     //Delete account in firebase.
     public void deleteAccount() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null && actualPassword.getText().toString().equals(NotesApp.password_user)) {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
             progressBar.setVisibility(View.VISIBLE);
             noVisibleElements(1);
             user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
 
+                    //Reset global variables.
                     NotesApp.userLogged = false;
                     NotesApp.email_user = null;
                     NotesApp.password_user = null;
 
+                    //Exit and finish activity.
                     mAuth.signOut();
                     finishAffinity();
 
@@ -424,11 +411,9 @@ public class SettingsApp extends AppCompatActivity {
                 }
             });
         } else {
-            actualPassword.setText("");
-            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.equals_pass), Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT);
             toast.show();
-
-        }
+            }
     }
 
     //Method for validate email.
@@ -627,32 +612,55 @@ public class SettingsApp extends AppCompatActivity {
             imageViewUser.setImageBitmap(result);
         }
     }
+    //When delete profile, delete photo porfile with firebase.
+    public void deleteImageFirebase(){
+
+        if (actualPassword.getText().toString().equals(NotesApp.password_user)) {
+
+            noVisibleElements(1);
+            progressBar.setVisibility(View.VISIBLE);
+            // Create a storage reference from our app
+            FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
+
+            // Create a reference to the file to delete
+            StorageReference desertRef = mFirebaseStorage.getReferenceFromUrl(photoUrl.toString());
+
+            // Delete the file
+            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    noVisibleElements(0);
+                    progressBar.setVisibility(View.GONE);
+
+                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_succeful), Toast.LENGTH_LONG);
+                    toast.show();
+                    //When finish action deleteImage go deleteAccount.
+                    deleteAccount();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_error), Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+        }else {
+            actualPassword.setText("");
+            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.equals_pass), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+    //Listener for error delete image.
+    class MyFailureListener implements OnFailureListener {
+        @Override
+        public void onFailure(@NonNull Exception exception) {
+            int errorCode = ((StorageException) exception).getErrorCode();
+            String errorMessage = exception.getMessage();
+            // test the errorCode and errorMessage, and handle accordingly
+            System.out.println(errorMessage);
+        }
+    }
 }
 
-//Falta configurar que al borrar la cuenta se borre la foto.
-
-
-    //When delete profile, delete photo porfile with firebase.
-//    public void deleteImageFirebase(){
-//
-//        // Create a storage reference from our app
-//        mStorageRef = FirebaseStorage.getInstance().getReference();
-//
-//        // Create a reference to the file to delete
-//        StorageReference desertRef = mStorageRef.child(File.separator + "ImageProfile" + File.separator + NotesApp.email_user);
-//        // Delete the file
-//        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Toast toast = Toast.makeText(getApplicationContext(),"Borrada",Toast.LENGTH_LONG);
-//                toast.show();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Uh-oh, an error occurred!
-//            }
-//        });
-//    }
-//}
-
+//Se detecta un error que ocurre en algunas ocasiones en el metodo de borrar imagen. Próximo dia prueba de try/catch en el método.
