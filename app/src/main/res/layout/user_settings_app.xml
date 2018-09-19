@@ -66,7 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="3"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -80,16 +81,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/note"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/text_size_card" />
 
                     <TextView
                         android:id="@+id/item_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="14"
+                        android:text="@string/size"
                         android:textColor="@color/violet"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_card"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -105,16 +106,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/shared_notes"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/text_size_card"/>
 
                     <TextView
                         android:id="@+id/item_shared"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="14"
+                        android:text="@string/size"
                         android:textColor="@color/violet"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_card"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -130,16 +131,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/votes"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/text_size_card" />
 
                     <TextView
                         android:id="@+id/item_votes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="14"
+                        android:text="@string/size"
                         android:textColor="@color/violet"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/text_size_card"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -161,7 +162,8 @@
 
             <ImageView
                 style="@style/ImageResources"
-                android:src="@drawable/ic_email" />
+                android:src="@drawable/ic_email"
+                android:contentDescription="@string/image_description" />
 
             <TextView
                 android:id="@+id/desplegableEmail"
@@ -169,7 +171,7 @@
                 android:text="@string/quetion_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="20dp"/>
+                android:paddingStart="20dp" />
 
         </LinearLayout>
 
@@ -183,7 +185,8 @@
             <EditText
                 android:id="@+id/mail"
                 style="@style/EditSettings"
-                android:hint="@string/input_email" />
+                android:hint="@string/input_email"
+                android:inputType="text"/>
 
             <TextView
                 android:id="@+id/change_email"
@@ -199,7 +202,8 @@
 
             <ImageView
                 style="@style/ImageResources"
-                android:src="@drawable/ic_security" />
+                android:src="@drawable/ic_security"
+                android:contentDescription="@string/image_description"  />
 
             <TextView
                 android:id="@+id/desplegablePass"
@@ -243,7 +247,8 @@
 
             <ImageView
                 style="@style/ImageResources"
-                android:src="@drawable/ic_delete" />
+                android:src="@drawable/ic_delete"
+                android:contentDescription="@string/image_description" />
 
             <TextView
                 android:id="@+id/desplegableDeleteAccount"

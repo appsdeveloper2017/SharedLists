@@ -21,7 +21,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <!--Settings dimension-->
-    <dimen name="main_relative_height">350dp</dimen>
+    <dimen name="main_relative_height">340dp</dimen>
     <dimen name="principal_layout_height">250dp</dimen>
 
     <dimen name="photo_witdh">120dp</dimen>
@@ -39,4 +39,7 @@
 
     <!--Card elevation-->
     <dimen name="elevation">10dp</dimen>
+    <dimen name="card_height">120dp</dimen>
+    <dimen name="card_margin_top">200dp</dimen>
+    <dimen name="text_size_card">18sp</dimen>
 </resources>

@@ -18,7 +18,7 @@
         completions."
     </string>
     <string name="error">An error has occurred</string>
-    <string name="new_member">You are not a member? creat your account…</string>
+    <string name="new_member">You are not a member? create your account…</string>
     <string name="button_new_user">Create new user</string>
     <string name="account_alredy_exist">I am already a user, I have an account</string>
     <string name="title_activity_principal">Hello again!</string>
@@ -76,6 +76,11 @@
     <!--Strings related for delete photo-->
     <string name="delete_image_succeful">Image profile deleted!</string>
     <string name="delete_image_error">Error for delete image profile</string>
+    <string name="delete_image_error_try">Error for delete image profile, try again…</string>
+
+    <!--Descriptions images-->
+    <string name="image_description">Image icon</string>
+    <string name="size">14</string>
     
     <!--Main strings-->
     <string name="recovering_notes">Recovering notes, please wait…</string>

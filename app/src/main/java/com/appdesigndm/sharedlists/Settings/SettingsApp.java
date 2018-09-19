@@ -613,45 +613,54 @@ public class SettingsApp extends AppCompatActivity {
         }
     }
     //When delete profile, delete photo porfile with firebase.
-    public void deleteImageFirebase(){
+    public void deleteImageFirebase() {
 
-        if (actualPassword.getText().toString().equals(NotesApp.password_user)) {
 
-            noVisibleElements(1);
-            progressBar.setVisibility(View.VISIBLE);
-            // Create a storage reference from our app
-            FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
+        try {
+            if (actualPassword.getText().toString().equals(NotesApp.password_user)) {
 
-            // Create a reference to the file to delete
-            StorageReference desertRef = mFirebaseStorage.getReferenceFromUrl(photoUrl.toString());
+                noVisibleElements(1);
+                progressBar.setVisibility(View.VISIBLE);
+                // Create a storage reference from our app
+                FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance().getReference().getStorage();
 
-            // Delete the file
-            desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    noVisibleElements(0);
-                    progressBar.setVisibility(View.GONE);
+                // Create a reference to the file to delete
+                StorageReference desertRef = mFirebaseStorage.getReferenceFromUrl(photoUrl.toString());
 
-                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_succeful), Toast.LENGTH_LONG);
-                    toast.show();
-                    //When finish action deleteImage go deleteAccount.
-                    deleteAccount();
+                // Delete the file
+                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        noVisibleElements(0);
+                        progressBar.setVisibility(View.GONE);
 
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_error), Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });
-        }else {
-            actualPassword.setText("");
-            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.equals_pass), Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_succeful), Toast.LENGTH_LONG);
+                        toast.show();
+                        //When finish action deleteImage go deleteAccount.
+                        deleteAccount();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_error), Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+            } else {
+                actualPassword.setText("");
+                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.equals_pass), Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        } catch (Exception e) {
+            noVisibleElements(0);
+            progressBar.setVisibility(View.GONE);
+            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.delete_image_error_try), Toast.LENGTH_SHORT);
             toast.show();
         }
     }
-    //Listener for error delete image.
+
+        //Listener for error delete image.
     class MyFailureListener implements OnFailureListener {
         @Override
         public void onFailure(@NonNull Exception exception) {
@@ -662,5 +671,4 @@ public class SettingsApp extends AppCompatActivity {
         }
     }
 }
-
-//Se detecta un error que ocurre en algunas ocasiones en el metodo de borrar imagen. Próximo dia prueba de try/catch en el método.
+//Fallo si cargas la foto e intentas borrarla al momento.
